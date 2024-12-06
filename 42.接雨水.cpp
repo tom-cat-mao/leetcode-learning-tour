@@ -13,65 +13,37 @@ class Solution {
 public:
     int trap(vector<int>& height) {
         int volume = 0;
-        auto max_valuer = max_element(height.begin(), height.end());
-        int max_value_index = distance(height.begin(), max_valuer);
-        int i = find_next(height, 0);
-        int left_max_index = i;
-        stack<int> opposite_volume;
-        while(i < height.size()) {
-            int j = find_next(height, i);
+        stack<int> index_stack;
+        const static int MIN_CAPICITY = 2;
 
-            if (j == -1) {
-                break;
+        int i = 0;
+
+        while (i < height.size()) {
+            if (index_stack.size() < MIN_CAPICITY) {
+                index_stack.push(i);
+                i++;
+                continue;
             }
 
-            if (height[j] > height[left_max_index]) {
-                volume += height[left_max_index] * (j - left_max_index) - sumStack(opposite_volume);
-            } else {
-                opposite_volume.push(height[j] + min(i, j) * (j - i));
+            if (height[i] > height[index_stack.top()]) {
+                for (
+                    int j = index_stack.top(); 
+                    !index_stack.empty() && height[i] > height[j]; 
+                    j = index_stack.top()
+                    ){
+                    index_stack.pop();
+                    volume += (min(height[i], height[index_stack.top()]) - height[j]) * (i - index_stack.top() - 1);
+                }
             }
 
-            i = j;
+            index_stack.push(i);
+
+            i++;
         }
-
-        volume += sumStack(opposite_volume);
-
-
-        do {
-            i = find_next(height, max_value_index);
-
-            volume -= height[i];
-        } while(i < height.size());
 
         return volume;
     }
 
-    int sumStack(stack<int>& volume) {
-        int sum = 0;
-
-        while (!volume.empty()) {
-            sum += volume.top();
-            volume.pop();
-        }
-
-        return sum;
-    }
-
-    int find_next(const vector<int>& vec, int i) {
-        int j;
-
-        for (int j = i + 1; j < vec.size(); j++) {
-            if (j > 0) {
-                break;
-            }
-        }
-
-        if ((j == vec.size() - 1) && vec[j] == 0) {
-            return -1;
-        }
-
-        return j;
-    }
 };
 // @lc code=end
 
