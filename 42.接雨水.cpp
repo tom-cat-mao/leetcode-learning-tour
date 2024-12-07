@@ -12,34 +12,25 @@ using namespace std;
 class Solution {
 public:
     int trap(vector<int>& height) {
-        int volume = 0;
-        stack<int> index_stack;
-        const static int MIN_CAPICITY = 2;
+        vector<int> LeftMax(height.size());
+        vector<int> RightMax(height.size());
+        int left, right, volume;
+        left = right = volume = 0;
 
-        int i = 0;
+        for (int i = 0; i < height.size(); i++) {
+            left = height[i] > left ? height[i] : left;
 
-        while (i < height.size()) {
-            if (index_stack.size() < MIN_CAPICITY) {
-                index_stack.push(i);
-                i++;
-                continue;
-            }
-
-            if (height[i] > height[index_stack.top()]) {
-                for (
-                    int j = index_stack.top(); 
-                    !index_stack.empty() && height[i] > height[j]; 
-                    j = index_stack.top()
-                    ){
-                    index_stack.pop();
-                    volume += (min(height[i], height[index_stack.top()]) - height[j]) * (i - index_stack.top() - 1);
-                }
-            }
-
-            index_stack.push(i);
-
-            i++;
+            LeftMax[i] = left;
         }
+
+        for (int i = height.size() - 1; i > -1; i--) {
+            right = height[i] > right ? height[i] : right;
+
+            RightMax[i] = right;
+        }
+
+        for (int i = 0; i < height.size(); i++)
+            volume += min(LeftMax[i], RightMax[i]) - height[i];
 
         return volume;
     }
