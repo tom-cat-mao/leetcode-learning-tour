@@ -5,26 +5,27 @@
  */
 
 // @lc code=start
-#include <bits/stdc++.h>
-
-using namespace std;
-
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        vector<char> man_made_queue;
+        int max_length = 0;
+        unordered_set<char> occ;
+
+        for (int left = 0, right = 0; right < s.size(); right++) {
+            char c = s[right];
+
+            while(occ.count(c)) {
+                occ.erase(s[left]);
+                left++;
+            }
+
+            occ.insert(c);
+            max_length = max(max_length, right - left + 1);
+        }
+
+        return max_length;
     }
 
-    int is_copied(const vector<char>& str, vector<char>& result, int i) {
-        int j, k;
-        for (
-            j = i, k = 0; 
-            str[j] == result[k] && j < result.size(); 
-            j++, k++ 
-            );
-
-        return j;
-    }
 };
 // @lc code=end
 
