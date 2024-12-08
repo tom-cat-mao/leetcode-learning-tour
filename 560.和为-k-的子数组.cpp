@@ -13,16 +13,10 @@ class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
         int result = 0;
+        queue<int> sub_nums;
 
-        for (int i = 0; i < nums.size(); i++) {
-            for (int j = i; j < nums.size(); j++) {
-                int sum = accumulate(nums.begin() + i, nums.begin() + j + 1, 0);
-                if (sum == k) {
-                    result++;
-                } else if (sum > k) {
-                    break;
-                }
-            }
+        for (int left = 0, right = 0; right < nums.size(); right++) {
+            int num = nums[right];
         }
 
         return result;
