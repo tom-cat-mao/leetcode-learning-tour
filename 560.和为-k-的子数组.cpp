@@ -12,14 +12,22 @@ using namespace std;
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
-        int result = 0;
-        queue<int> sub_nums;
+        int count = 0;
+        map<int, int> countTo;
+        countTo.insert(make_pair(0, 1));
+        int pre = 0;
 
-        for (int left = 0, right = 0; right < nums.size(); right++) {
-            int num = nums[right];
+        for (int i = 0; i < nums.size(); i++) {
+            pre += nums[i];
+
+            if (countTo.find(pre - k) != countTo.end()) {
+                count += countTo[pre - k];
+            }
+
+            countTo[pre]++;
         }
 
-        return result;
+        return count;
     }
             
 };
