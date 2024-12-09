@@ -12,25 +12,26 @@ using namespace std;
 class Solution {
 public:
     int trap(vector<int>& height) {
-        vector<int> LeftMax(height.size());
-        vector<int> RightMax(height.size());
-        int left, right, volume;
-        left = right = volume = 0;
+        int volume = 0;
+        stack<int> mystack;
 
-        for (int i = 0; i < height.size(); i++) {
-            left = height[i] > left ? height[i] : left;
+        mystack.push(0);
 
-            LeftMax[i] = left;
+        for (int i = 1; i < height.size(); i++) {
+            while(!mystack.empty() && height[i] > height[mystack.top()]) {
+                int n1 = mystack.top();
+                mystack.pop();
+                
+                if (!mystack.empty()) {
+                    int n2 = mystack.top();
+                    int h = min(height[n2], height[i]) - height[n1]; 
+                    int w = i - n2 - 1;
+                    volume += h * w;
+                }
+            }
+
+            mystack.push(i);
         }
-
-        for (int i = height.size() - 1; i > -1; i--) {
-            right = height[i] > right ? height[i] : right;
-
-            RightMax[i] = right;
-        }
-
-        for (int i = 0; i < height.size(); i++)
-            volume += min(LeftMax[i], RightMax[i]) - height[i];
 
         return volume;
     }
