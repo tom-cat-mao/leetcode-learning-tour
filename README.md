@@ -125,3 +125,55 @@ for (int l = 0, r = 0 ; r < n ; r++) {
 **Example**
 求数组中以**k**为长度的子数组中每个最大的值。
 
+**思路** 对数组长度求以2为底数的对数值，即log<sub>2</sub>(length) = k. 得到数组内最大长度的子数组，可能出现重复问题，但不影响计算结果。如下图所示
+![Alt Text](./images/ST.png)
+
+**示例代码**
+```cpp
+#include <bis/stdc++.h>
+using namespace std;
+
+const int MAX_H = 100005;
+const int LOG = 17;
+int a[MAX_N];
+int m[MAX_N][LOG];
+int bin_log[MAX_H];
+
+int query(int L, int R) {
+    int length = R - L + 1;
+    int k = bin_log[length]; // something like a matrix
+    return min(m[L][k], m[R - (1 << k) + 1][k]);
+}
+
+int main() {
+    // 1) read input
+    int n;
+    cin >> n;
+    bin_log[1] = 0;
+    for (int i = 2; i < n; i++) {
+        bin_log[i] = bin_log[i / 2] + 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        m[i][0] = a[i];
+    }
+
+    // 2) preprocessijng, O(N*log(N))
+    for (int k = 1; k < LOG; k++) {
+        for (int i = 0; i + (1 << k) - 1 < n; i++) {
+            m[i][k] = min(m[i][k - 1], m[i + (1 << (k - 1))][k - 1]); // find the minimue number in the subarray, each subarray is devided by two
+        }
+    }
+
+    // 3) answer queries
+    int q;
+    cin >> q;
+    for (int i = 0; i < q; i++) {
+        int L, R;
+        cin >> L >> R;
+        cout << query(L, R) << "\n";
+    }
+}
+```
+[详细讲解](https://youtu.be/0jWeUdxrGm4?si=SW8AJGbjruhCvw7c)
