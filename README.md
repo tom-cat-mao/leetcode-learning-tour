@@ -126,6 +126,7 @@ for (int l = 0, r = 0 ; r < n ; r++) {
 求数组中以**k**为长度的子数组中每个最大的值。
 
 **思路** 对数组长度求以2为底数的对数值，即log<sub>2</sub>(length) = k. 得到数组内最大长度的子数组，可能出现重复问题，但不影响计算结果。如下图所示
+
 ![Alt Text](./images/ST.png)
 
 **示例代码**
@@ -177,3 +178,22 @@ int main() {
 }
 ```
 [详细讲解](https://youtu.be/0jWeUdxrGm4?si=SW8AJGbjruhCvw7c)
+
+## BitWise Operation
+
+the ***&, |, AND ^*** operator
+
+### check if the bit is 1 or 0
+
+```cpp
+for (int i = 0; (1 << i) <= n; i++) {
+    if (n & (1 << i)) {
+        cout << "1";
+    } else {
+        cout << "0";
+    }
+}
+```
+
+[详细讲解](https://youtu.be/xXKL9YBWgCY?si=nSjfuZOPxzLR9uiY)
+
