@@ -12,7 +12,7 @@ using namespace std;
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        map<int, int> myMap;
+        multimap<int, int> myMap;
        vector<vector<int>> result;
         for (int i = 0; i < intervals.size(); i++) {
             myMap.insert(make_pair(intervals[i][0], intervals[i][1]));
@@ -21,12 +21,12 @@ public:
         int min = (*it).first;
         int max = (*it).second;
 
-        while(it != myMap.end()) {
 
-            if (next(it) == myMap.end()) {
-                result.push_back(vector<int>{min, max});
-                break;
-            }
+        while(it != myMap.end()) {
+            // if (next(it) == myMap.end()) {
+                // result.push_back(vector<int>{min, max});
+                // break;
+            // }
 
             if ((*it).first <= max) {
                 max = std::max((*it).second, max);
@@ -37,7 +37,11 @@ public:
             }
 
             it++;
+
         }
+
+        result.push_back(vector<int>{min, max});
+
 
         return result;
     }
