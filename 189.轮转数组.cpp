@@ -12,13 +12,17 @@ using namespace std;
 class Solution {
 public:
     void rotate(vector<int>& nums, int k) {
-        int interval = nums.size() - k;
-
-        for (int i = nums.size() - 1; i > interval - 1; i--) {
-            int temp = nums[i];
-            nums[i] = nums[i - k];
-            nums[i - k] = temp;
+        int clength = nums.size() - k % nums.size();
+        vector<int> temp;
+        for (int i = clength; i < nums.size(); i++) {
+            temp.push_back(nums[i]);
         }
+
+        for (int i = 0; i < clength; i++) {
+            temp.push_back(nums[i]);
+        }
+
+        nums = temp;
     }
 };
 // @lc code=end
