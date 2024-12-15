@@ -14,6 +14,8 @@
  * };
  */
 #include <bits/stdc++.h>
+#include <cwchar>
+#include <unordered_set>
 
 using namespace std;
 
@@ -24,24 +26,19 @@ public:
     //     ListNode *next;
     //     ListNode(int x) : val(x), next(NULL) {}
     // };
+
     ListNode *detectCycle(ListNode *head) {
         if (head == nullptr || (head -> next == nullptr)) return nullptr;
         if (head -> next == head) return head;
-        ListNode* fast = head, *slow = head;
 
-        do {
-            if (slow -> next != nullptr) slow = slow -> next;
-            else return nullptr;
-            int count = 2;
-            while (count > 0) {
-                if (fast -> next != nullptr) fast = fast -> next;
-                else return nullptr;
-                count--;
-            }
-        } while (slow != fast);
+        unordered_set<ListNode*> address;
 
-        return fast;
+        for (auto* ptr = head; ptr != nullptr; ptr = ptr -> next) {
+            if (address.find(ptr) != address.end()) return ptr;
+            address.insert(ptr);
+        }
 
+        return nullptr;
     }
 };
 // @lc code=end
