@@ -33,8 +33,6 @@ public:
     ListNode* swapPairs(ListNode* head) {
         if (head == nullptr || head -> next == nullptr) return head;
 
-        // head -> next -> next = swapPairs(head -> next -> next -> next);
-
         ListNode* current = head -> next;
         ListNode* temp = current -> next;
 
