@@ -197,3 +197,10 @@ for (int i = 0; (1 << i) <= n; i++) {
 
 [详细讲解](https://youtu.be/xXKL9YBWgCY?si=nSjfuZOPxzLR9uiY)
 
+## CPP二分查函数
+
+**例题** 240.搜索二维矩阵 II
+
+**lower_bound(begin, end, num)** 从数组的begin位置到end-1位置二分查找第一个大于或等于num的数字，找到返回该数字的地址，不存在则返回end。通过返回的地址减去起始地址begin,得到找到数字在数组中的下标。
+**upper_bound(begin, end, num)** 从数组的begin位置到end-1位置二分查找第一个大于num的数字，找到返回该数字的地址，不存在则返回end。通过返回的地址减去起始地址begin,得到找到数字在数组中的下标。
+
