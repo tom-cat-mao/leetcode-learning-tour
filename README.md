@@ -204,3 +204,35 @@ for (int i = 0; (1 << i) <= n; i++) {
 **lower_bound(begin, end, num)** 从数组的begin位置到end-1位置二分查找第一个大于或等于num的数字，找到返回该数字的地址，不存在则返回end。通过返回的地址减去起始地址begin,得到找到数字在数组中的下标。
 **upper_bound(begin, end, num)** 从数组的begin位置到end-1位置二分查找第一个大于num的数字，找到返回该数字的地址，不存在则返回end。通过返回的地址减去起始地址begin,得到找到数字在数组中的下标。
 
+## 合并两个链表
+
+**例题** 23.合并K个升序链表
+
+**例**：a,b链表长度均为n，如何在**O(n)**的时间代价以及**O(1)**的空间代价完成合并
+
+**宗旨**：原地调整链表元素的next指针完成合并
+
+**过程**
+
+- 首先用***head***保存合并之后的头部
+- 指针***tail***记录下一个插入位置的前一个位置，以及两个指针***aPtr***,***bPtr***记录***a***,***b***未合并部分的第一位。
+- 当***aPtr***和***bPtr***都不为空时，取***value***属性较小的合并；如果***aPtr***为空，则把整个***bPtr***以及后面的元素全部合并；***bPtr***为空时同理。
+- 合并时，应先调整***tail***的***next***属性，再后移***tail***和***Ptr***（***aPtr***或者***bPtr***）。***tail***和***Ptr***不存在先后顺序
+
+**例**
+```cpp
+ListNode* mergeTwoLists(ListNode *a, ListNode *b) {
+    if ((!a) || (!b)) return a ? a : b;
+    ListNode head, *tail = &head, *aPtr = a, *bPtr = b;
+    while (aPtr && bPtr) {
+        if (aPtr->val < bPtr->val) {
+            tail->next = aPtr; aPtr = aPtr->next;
+        } else {
+            tail->next = bPtr; bPtr = bPtr->next;
+        }
+        tail = tail->next;
+    }
+    tail->next = (aPtr ? aPtr : bPtr);
+    return head.next;
+}
+```
