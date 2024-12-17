@@ -1,6 +1,5 @@
 // ignore all the files in .vscode
 .vscode/*
 
-// ignore all the file with vcore*
-vcore*
-
+// ignore all the file with vgcore*
+vgcore*
