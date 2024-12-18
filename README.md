@@ -236,3 +236,28 @@ ListNode* mergeTwoLists(ListNode *a, ListNode *b) {
     return head.next;
 }
 ```
+
+## Judge if a BST is Symmetric
+
+**例题**：101.对称二叉树
+
+**思路**：通过比较树的左子树和右子树来实现，若左子树和右子树是对称的，则整个二叉树是对称的。
+
+**伪代码**
+```
+function isSymmetric(root):
+    if root is null:
+        return true
+    else:
+        return isMirror(root.left, root.right)
+
+function isMirror(left, right):
+    if left is null and right is null:
+        return true
+    if left is null or right is null:
+        return false
+
+    return (left.val == right.val) and
+           isMirror(left.left, right.right) and
+           isMirror(left.right, right.left)
+```
