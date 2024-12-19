@@ -261,3 +261,51 @@ function isMirror(left, right):
            isMirror(left.left, right.right) and
            isMirror(left.right, right.left)
 ```
+
+## 遍历二叉树，但每层分开存储
+
+**例题** 102.二叉树的遍历
+
+```cpp
+// DFS
+class Solution {
+private:
+    vector<vector<int>> ans;
+public:
+    void dfs(TreeNode* root, int depth) {
+        if (!root) return;
+        if (depth >= ans.size()) ans.push_back({root->val});
+        else ans[depth].push_back(root->val);
+        dfs(root->left, depth+1);
+        dfs(root->right, depth+1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        dfs(root, 0);
+        return ans;
+    }
+};
+```
+
+```cpp
+// BFS
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        if (!root) return {};
+        vector<vector<int>> ans;
+        queue<TreeNode*> q; q.push(root);
+        while (!q.empty()) {
+            int n = q.size();
+            vector<int> layer;
+            while (n) {
+                auto node = q.front(); q.pop(); n--;
+                layer.push_back(node->val);
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
+            ans.push_back(layer);
+        }
+        return ans;
+    }
+};
+```
