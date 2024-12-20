@@ -380,3 +380,24 @@ public:
     }
 };
 ```
+
+## 二叉树中序遍历（迭代算法）模板
+
+### 模板
+```cpp
+while (!stack.empty() || root != nullptr) {
+    while (root != nullptr) {
+        stack.push(root);
+        root = root -> left;
+    }
+
+    root = stack.top();
+    stack.pop();
+
+    // 判断条件或其他要求
+
+    root = root -> right;
+}
+```
+
+### 例题 [230.二叉搜索树中第K小的元素](./230.二叉搜索树中第-k-小的元素.cpp)
