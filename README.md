@@ -44,7 +44,7 @@ I will add some algorithm to this file.
 
 ## 单调栈
 
-**例题为 42.接水**
+**例题为 [42.接水](./42.接雨水.cpp)**
 
 **特点**：栈中的元素始终保持单调有序。通常有两种单调栈，分别是单调递增栈和单调递减栈。
 
@@ -71,7 +71,7 @@ I will add some algorithm to this file.
 
 ## 单调队列
 
-**例题为 239.滑动窗口最大值**
+**例题为 [239.滑动窗口最大值](./239.滑动窗口最大值.cpp)**
 
 **特点**：单调递减或者单调递增的队列。队列中的元素只能在队尾入队、从队首或者队尾出队。
 
@@ -96,7 +96,7 @@ for( int i = 0;i < size;++i)
 
 ## 滑动窗口
 
-**例题为： 3, 438**
+**例题为： [3.无重复字符的最长字符串](./3.无重复字符的最长子串.cpp), [438.找到字符串中所有字母异位词](./438.找到字符串中所有字母异位词.cpp)**
 
 **模板**
 ```cpp
@@ -199,14 +199,14 @@ for (int i = 0; (1 << i) <= n; i++) {
 
 ## CPP二分查函数
 
-**例题** 240.搜索二维矩阵 II
+**例题** [240.搜索二维矩阵 II](./240.搜索二维矩阵-ii.cpp)
 
 **lower_bound(begin, end, num)** 从数组的begin位置到end-1位置二分查找第一个大于或等于num的数字，找到返回该数字的地址，不存在则返回end。通过返回的地址减去起始地址begin,得到找到数字在数组中的下标。
 **upper_bound(begin, end, num)** 从数组的begin位置到end-1位置二分查找第一个大于num的数字，找到返回该数字的地址，不存在则返回end。通过返回的地址减去起始地址begin,得到找到数字在数组中的下标。
 
 ## 合并两个链表
 
-**例题** 23.合并K个升序链表
+**例题** [23.合并K个升序链表](./23.合并-k-个升序链表.cpp)
 
 **例**：a,b链表长度均为n，如何在**O(n)**的时间代价以及**O(1)**的空间代价完成合并
 
@@ -239,7 +239,7 @@ ListNode* mergeTwoLists(ListNode *a, ListNode *b) {
 
 ## Judge if a BST is Symmetric
 
-**例题**：101.对称二叉树
+**例题**：[101.对称二叉树](./101.对称二叉树.cpp)
 
 **思路**：通过比较树的左子树和右子树来实现，若左子树和右子树是对称的，则整个二叉树是对称的。
 
@@ -264,7 +264,9 @@ function isMirror(left, right):
 
 ## 遍历二叉树，但每层分开存储
 
-**例题** 102.二叉树的遍历
+### 中序遍历二叉树得到的数组是递增的
+
+**例题** [102.二叉树的遍历](./102.二叉树的层序遍历.cpp)
 
 ```cpp
 // DFS
@@ -306,6 +308,61 @@ public:
             ans.push_back(layer);
         }
         return ans;
+    }
+};
+```
+
+## 检验二叉树是否正确
+
+**例题** [98.验证二叉搜索树](./98.验证二叉搜索树.cpp)
+
+**思路**：树中的节点是否正确，由上下限决定。
+
+### 方案一，递归
+```cpp
+class Solution {
+public:
+    bool helper(TreeNode* root, long long lower, long long upper) {
+        if (root == nullptr) {
+            return true;
+        }
+        if (root -> val <= lower || root -> val >= upper) {
+            return false;
+        }
+        return helper(root -> left, lower, root -> val) && helper(root -> right, root -> val, upper);
+    }
+    bool isValidBST(TreeNode* root) {
+        return helper(root, LONG_MIN, LONG_MAX);
+    }
+};
+```
+
+### 方案二，中序遍历
+
+#### 中序遍历二叉树得到的数组是递增的
+
+```cpp
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        stack<TreeNode*> stack;
+        long long inorder = (long long)INT_MIN - 1;
+
+        while (!stack.empty() || root != nullptr) {
+            while (root != nullptr) {
+                stack.push(root);
+                root = root -> left;
+            }
+            root = stack.top();
+            stack.pop();
+            // 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树
+            if (root -> val <= inorder) {
+                return false;
+            }
+            inorder = root -> val;
+            root = root -> right;
+        }
+        return true;
     }
 };
 ```
