@@ -401,3 +401,56 @@ while (!stack.empty() || root != nullptr) {
 ```
 
 ### 例题 [230.二叉搜索树中第K小的元素](./230.二叉搜索树中第-k-小的元素.cpp)
+
+## 二叉树展开为链表
+
+### 例题 [114.二叉树展开为链表](./114.二叉树展开为链表.cpp)
+
+#### 作法一（非常聪明的做法）
+```java
+class Solution {
+    public void flatten(TreeNode root) {
+        while (root != null) {
+            TreeNode move = root.left;
+            //找到左子树的最右节点，即左子树最接近root的节点
+            while (move != null && move.right != null) {
+                move = move.right;
+            }
+
+            //将root的右子树接到左子树的最右节点上
+            if (move != null) {
+                move.right = root.right;
+                root.right = root.left;
+                root.left = null;
+            }
+            root = root.right;
+        }
+    }
+}
+```
+
+#### 做法二（前序遍历）
+
+```cpp
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        vector<TreeNode*> l;
+        preorderTraversal(root, l);
+        int n = l.size();
+        for (int i = 1; i < n; i++) {
+            TreeNode *prev = l.at(i - 1), *curr = l.at(i);
+            prev->left = nullptr;
+            prev->right = curr;
+        }
+    }
+
+    void preorderTraversal(TreeNode* root, vector<TreeNode*> &l) {
+        if (root != NULL) {
+            l.push_back(root);
+            preorderTraversal(root->left, l);
+            preorderTraversal(root->right, l);
+        }
+    }
+};
+```
