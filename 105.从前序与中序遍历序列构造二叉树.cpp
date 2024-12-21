@@ -16,24 +16,31 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// struct TreeNode {
+//     int val;
+//     TreeNode *left;
+//     TreeNode *right;
+//     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+//     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+//     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+// };
+
 class Solution {
 public:
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-         auto createSubtree = [](auto&& createSubtree, const vector<int>::iterator& preorderStart, const vector<int>::iterator& inorderStart, const vector<int>::iterator& inorderEnd) -> TreeNode* { // 定义一个递归 lambda 函数
-            if (inorderStart == inorderEnd) return nullptr; // 如果中序遍历的左边界等于右边界，说明当前子树为空
+        auto dfs = [](auto&& dfs, auto&& lP, auto&& lI, auto&& rI) {
+            if (lI == rI) return (TreeNode*) nullptr;
 
-            int rootValue = *preorderStart; // 获取前序遍历的第一个元素作为根节点值
-            auto inOrderIterator = find(inorderStart, inorderEnd, rootValue); // 找到前序遍历的第一个元素在中序遍历中的位置
-            
-            TreeNode* root = new TreeNode(rootValue);
-            root->left = createSubtree(createSubtree, preorderStart + 1, inorderStart, inOrderIterator); // 递归构建左子树
-            root->right = createSubtree(createSubtree, preorderStart + (inOrderIterator - inorderStart) + 1, inOrderIterator + 1, inorderEnd); // 递归构建右子树
+            auto loc = find(lI, rI, *lP);
 
-            return root; // 返回当前根节点
+            return new TreeNode(*lP, dfs(dfs, lP + 1, lI, loc), dfs(dfs, lP + (loc - lI) + 1, loc + 1, rI));
         };
 
-        return createSubtree(createSubtree, preorder.begin(), inorder.begin(), inorder.end()); // 调用递归 lambda 函数，传入前序遍历的起始位置和中序遍历的起始与结束位置
+        return dfs(dfs, preorder.cbegin(), inorder.cbegin(), inorder.cend());
     }
 };
 // @lc code=end
-
