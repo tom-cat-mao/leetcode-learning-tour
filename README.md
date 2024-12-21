@@ -3,9 +3,9 @@
 This is a note for my leetcoding learning tour.
 I will add some algorithm to this file.
 
-## KMP algorithm (子串搜索算法) 
+## KMP algorithm (子串搜索算法)
 
-### 思路 
+### 思路
 当一次比对失败时，利用已经匹配的那部分信息，将模式串尽可能多地移动到一个合适的位置，使得下一次比对可以从上一次匹配失败的那个位置开始继续进行。
 
 ### Example
@@ -115,16 +115,16 @@ for (int l = 0, r = 0 ; r < n ; r++) {
 }
 ```
 
-##  Sparse Table(ST/稀疏表) 
+##  Sparse Table(ST/稀疏表)
 
 ### 特点
 需要进行预处理，在O(1)时间内处理任意区间内的结果，预处理时间为O(nlogn)
 
-### 思路 
+### 思路
 将数组或字符串预处理，分成以2为底数的长度的子串，再对子串进行合并，处理，类似于merge sort 但需要进行预处理
 
 适用性
-适用于RMQ问题和RGQ问题 
+适用于RMQ问题和RGQ问题
 - RMQ：Range Minimum Query
 - 区间最大最小值问题
 - RGQ： Range GCD Query
@@ -451,6 +451,38 @@ public:
             preorderTraversal(root->left, l);
             preorderTraversal(root->right, l);
         }
+    }
+};
+```
+
+## 从前序与中序遍历构造二叉树
+
+### 例题 [105.从前序与中序遍历构造二叉树](./105.从前序与中序遍历序列构造二叉树.cpp)
+
+#### 思路
+中序遍历得到为[根节点, [左子树的前序遍历结果], [右子树的前序遍历结果]]
+
+前序遍历得到为[[左子树的中序遍历结果], 根节点, [右子树的中序遍历结果]]
+
+在中序遍历中**定位**到根节点。
+
+同一子树的前序和中序长度是相同的，所以定位后可以**确定左右子树中节点的数目**。
+
+由此可得一个巧妙的算法
+
+#### 实例代码
+
+```cpp
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        auto dfs = [](auto&& dfs, auto&& lP, auto&& lI, auto&& rI) {
+            if (lI == rI) return (TreeNode*)nullptr;
+            auto loc = find(lI, rI, *lP);
+            return new TreeNode(*lP, dfs(dfs, lP + 1, lI, loc),
+                                     dfs(dfs, lP + (loc - lI) + 1, loc + 1, rI));
+        };
+        return dfs(dfs, preorder.cbegin(), inorder.cbegin(), inorder.cend());
     }
 };
 ```
