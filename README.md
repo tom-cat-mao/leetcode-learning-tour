@@ -494,3 +494,78 @@ public:
 #### 思路
 
 ![Alt Text](./images/problem-168.png)
+
+## Topological sorting（拓补排序）
+
+### [Example](./207.课程表.cpp)
+
+### mindset
+
+Order the vertices of a directed acyclic graph(DAG) in such a way that for evey directed edge *u -> v*, vertex *u* comes before vertex *v* in the ordering.
+
+### Pseudocode
+
+#### DFS
+
+```
+function DFS(node):
+    visited[node] = true
+    for each neighbor of node:
+        if not visited[neighbor]:
+            DFS(neighbor)
+    stack.push(node)
+
+function topologicalSort():
+    stack = empty stack
+    visited = array of boolean values initialized to false, size n (number of nodes)
+
+    for each node from 0 to n-1:
+        if not visited[node]:
+            DFS(node)
+
+    return reverse(stack)
+
+// Example usage:
+n = number of nodes
+adjList = adjacency list representation of the graph
+
+topologicalOrder = topologicalSort()
+print(topologicalOrder)
+```
+
+#### BFS
+```
+function topologicalSortBFS(adjList, inDegree):
+    queue = empty queue
+    topoOrder = empty list
+
+    // Initialize the queue with all nodes that have an in-degree of 0
+    for each node from 0 to n-1:
+        if inDegree[node] == 0:
+            enqueue(queue, node)
+
+    // Process the queue until it is empty
+    while not isEmpty(queue):
+        currentNode = dequeue(queue)
+        topoOrder.append(currentNode)
+
+        for each neighbor of currentNode:
+            inDegree[neighbor] -= 1
+            if inDegree[neighbor] == 0:
+                enqueue(queue, neighbor)
+
+    // If the length of topoOrder is n (number of nodes), a topological sort exists
+    return topoOrder
+
+// Example usage:
+n = number of nodes
+adjList = adjacency list representation of the graph
+inDegree = array of in-degrees initialized to 0, size n
+
+// Calculate in-degrees for each node
+for each node from 0 to n-1:
+    for each neighbor in adjList[node]:
+        inDegree[neighbor] += 1
+
+topologicalOrder = topologicalSortBFS(adjList, inDegree) print(topologicalOrder)
+```
