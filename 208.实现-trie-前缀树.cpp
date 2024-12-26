@@ -12,14 +12,14 @@ using namespace std;
 class Trie {
 public:
     Trie() {
-        root = make_shared<T_Node>(new T_Node());
+        root = make_shared<T_Node>();
     }
 
     void insert(string word) {
         shared_ptr<T_Node> ptr = root;
 
         for (const char& c: word) {
-            if (ptr -> children.at(c - 'a') == nullptr) ptr -> children.at(c - 'a') = make_shared<T_Node>(new T_Node());
+            if (ptr -> children.at(c - 'a') == nullptr) ptr -> children.at(c - 'a') = make_shared<T_Node>();
             else ptr = ptr -> children.at(c - 'a');
         }
 
@@ -27,11 +27,28 @@ public:
     }
 
     bool search(string word) {
-        return false;
+        shared_ptr<T_Node> ptr = root;
+
+        for (const char& c: word) {
+            if (ptr -> children.at(c - 'a') == nullptr) return false;
+            else ptr = ptr -> children.at(c - 'a');
+        }
+
+        if (!(ptr -> isEnd)) return false;
+        return true;
     }
 
     bool startsWith(string prefix) {
-        return false;
+        shared_ptr<T_Node> ptr = root;
+
+        for (const char& c:prefix) {
+            if (ptr -> children.at(c - 'a') == nullptr) return false;
+            else ptr = ptr -> children.at(c - 'a');
+        }
+
+        if (ptr -> isEnd) return false;
+
+        return true;
     }
 private:
     struct T_Node {
@@ -43,7 +60,6 @@ private:
     };
 
     shared_ptr<T_Node> root;
-    int size;
 };
 
 /**
