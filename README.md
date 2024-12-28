@@ -569,3 +569,29 @@ for each node from 0 to n-1:
 
 topologicalOrder = topologicalSortBFS(adjList, inDegree) print(topologicalOrder)
 ```
+
+## Get all the subset from a set of array
+
+### mindset
+
+- There are \(`2^n`\) options in the result include empty.
+- Go through each option with bitwise operation to judge if the element should be put into the subset
+
+### Pseudocode
+```
+function generateSubsets(arr):
+    n = length(arr)
+    result = new empty list
+
+    # Loop through all numbers from 0 to 2^n - 1
+    for i from 0 to 2^n - 1:
+        currentSubset = new empty list
+        for j from 0 to n-1:
+            if (i & (1 << j)) != 0:
+                append arr[j] to currentSubset
+        append currentSubset to result
+
+    return result
+```
+
+### [Example](./78.子集.cpp)
