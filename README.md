@@ -628,3 +628,157 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
     return dp[target];
 }
 ```
+
+## Backtracking（回溯）
+
+### [讲解](https://www.bilibili.com/video/BV1mG4y1A7Gu)
+
+### 子集型
+
+### Example [78.子集](./78.子集.cpp)  [131.分割回文串](./131.分割回文串.cpp)
+
+#### 方法一
+
+#### Consider Input
+
+##### Mindset
+
+1. 当前操作？枚举第 **i** 个数选/不选
+2. 子问题？从下标 **>= i** 的数字中构造子集
+3. 下一个子问题？从下标 **>= i + 1** 的数字中构造子集
+
+dfs(i) -> dfs(i + 1)
+
+
+```python
+# problem 78
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        auns = []
+        path = []
+        n = len(nums)
+        def dfs(i):
+            // 判断是否正确，正确则插入答案
+            if i == n:
+                ans.append(path.copy())
+                return
+
+            // 忽略当前位置
+            dfs(i + 1)
+
+            // 考虑当前位置
+            path.append(nums[i])
+            dfs(i + 1)
+            path.pop
+
+        dfs(0)
+        return ans
+```
+
+```cpp
+// problem 131
+class Solution {
+
+    bool isPalindrome(string& s, int left, int right) {
+        while (left < right) {
+            if (s[left++] != s[right--]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+public:
+    vector<vector<string>> partition(string s) {
+        int n = s.length();
+        vector<vector<string>> ans;
+        vector<string> path;
+
+        // start 表示当前这段回文子串的开始位置
+        auto dfs = [&](auto&& dfs, int i, int start) {
+            if (i == n) {
+                ans.emplace_back(path);
+                return;
+            }
+
+            // 不选 i 和 i+1 之间的逗号（i=n-1 时一定要选）
+            if (i < n - 1) {
+                dfs(dfs, i + 1, start);
+            }
+
+
+
+            // 选 i 和 i+1 之间的逗号（把 s[i] 作为子串的最后一个字符）
+            if (isPalindrome(s, start, i)) {
+                path.push_back(s.substr(start, i - start + 1));
+                dfs(dfs, i + 1, i + 1); // 下一个子串从 i+1 开始
+                path.pop_back(); // 恢复现场
+            }
+        };
+        dfs(dfs, 0, 0);
+        return ans;
+    }
+};
+```
+
+### 方法二
+
+#### Consider Output
+
+#### MindSet
+
+1. 当前操作？ 枚举一个下标 **j >= i** 的数字，加入path
+2. 子问题？从下标 **>=i** 的数字中构造子集
+3. 下一个子问题？从下标 **>= j + 1** 的数字中构造子集
+
+```
+dfs(i) -> dfs(i + 1)
+       -> dfs(i + 2)
+       ...
+       -> dfs(n)
+```
+
+```python
+# problem 78
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        ans = []
+        path = []
+        n = len(nums)
+        def dfs(i):
+            ans.append(path.copy())
+            if i == n:
+                return
+
+            for j in range(i, n):
+                path.append(nums[j])
+                dfs(j + 1)
+                path.pop()
+
+        dfs(0)
+        return ans
+```
+
+```python
+# problem 131
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        ans = []
+        path = []
+        n = len(s)
+        def dfs(i):
+            if i ==n:
+                ans.append(path.copy())
+                return
+
+            for j in range(i, n):
+                t = s[i: j + 1]
+                if t == t[::-1]:
+                    path.append(t)
+                    dfs(j + 1)
+                    path.pop()
+
+        dfs(0)
+        return ans
+```
