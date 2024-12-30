@@ -782,3 +782,76 @@ class Solution:
         dfs(0)
         return ans
 ```
+
+### 排列型
+
+#### [讲解视频](https://www.bilibili.com/video/BV1mY411D7f6)
+
+#### 例题 [46.全排列](./46.全排列.cpp) [51.N-Queens](./51.n-皇后.cpp)
+
+#### MindSet
+
+数组 ***path*** 记录路径上的数字（即宜选择的数字）
+
+集合 ***s*** 记录剩余未选的数字
+
+1. 当前操作？从 ***s*** 中枚举 ***path[i]*** 要填入的数字 ***x***
+2. 子问题？构造排列 ***>=i*** 的部分，剩余未选数字集合为 ***s***
+3. 下一个子问题？构造排列 ***>=i + 1*** 的部分，剩余未选数字集合为 ***s - {x}***
+
+```
+dfs(i, s) -> dfs(i + 1, s - {x1})
+          -> dfs(i + 1, s - {x2})
+          -> ...
+```
+
+```python
+# problem 46
+// this solution didn't mark the visited element
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        ans = []
+        path = [0] * n
+
+        def dfs(i, s):
+            if i == n:
+                ans.append(path.copy())
+                return
+            for x in s:
+                path[i] = x
+                dfs(i + 1, s - {x})
+
+        dfs(0, set(nums))
+        return ans
+```
+
+```python
+# problem 51
+// 相当于全排列，因为每行每列有且只能有一个Queen
+// 再对每行放置的Queen进行限制，即不能使用用过的列
+// 且对角线上不能有Queen,可以同数学方法判断
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        ans = []
+        queens = [0] * n  # 皇后放在 (r,queens[r])
+        col = [False] * n
+        diag1 = [False] * (n * 2 - 1)
+        diag2 = [False] * (n * 2 - 1)
+
+        def dfs(r: int) -> None:
+            if r == n:
+                ans.append(['.' * c + 'Q' + '.' * (n - 1 - c) for c in queens])
+                return
+
+            # 在 (r,c) 放皇后
+            for c, ok in enumerate(col):
+                if not ok and not diag1[r + c] and not diag2[r - c]:  # 判断能否放皇后
+                    queens[r] = c  # 直接覆盖，无需恢复现场
+                    col[c] = diag1[r + c] = diag2[r - c] = True  # 皇后占用了 c 列和两条斜线
+                    dfs(r + 1)
+                    col[c] = diag1[r + c] = diag2[r - c] = False  # 恢复现场
+
+        dfs(0)
+        return ans
+```
