@@ -855,3 +855,47 @@ class Solution:
         dfs(0)
         return ans
 ```
+## 字符解码
+
+### 例题 [394.字符串解码](./394.字符串解码.cpp)
+
+#### 思路
+
+1. 遍历字符串
+2. 如果 **c** 是数字字符，则更新 **count**
+3. 如果 **c** 是 **[** 则将当前计数和答案长度压入栈中，并重置 **count** 为 **0**
+4. 如果 **c** 是字母字符，则将其添加至结果字符串中
+5. 如果 **c** 是 **]** 则从栈中弹出一个元素，获取当前计数 **num** 和括号前的字符串长度，然后将括号内的字符串复制 **num - 1** 次， 并将其添加到结果字符串中
+
+#### Example
+
+```cpp
+class Solution {
+public:
+    string decodeString(string s) {
+        string ans; // 用于存储最终解码后的结果
+        stack<pair<int, int>> stk; // 用于存储计数和当前字符串长度的栈
+        int count = 0; // 当前数字部分
+
+        for (auto x : s) { // 遍历字符串中的每个字符
+            if (isdigit(x)) {
+                count = 10 * count + (x - '0'); // 更新计数
+            } else if (x == '[') {
+                stk.push({count, ans.size()}); // 将当前计数和答案长度压入栈中
+                count = 0; // 重置计数
+            } else if (isalpha(x)) {
+                ans += x; // 将字母字符添加到结果中
+            } else if (x == ']') {
+                int n = stk.top().first; // 获取当前数字部分
+                string str = ans.substr(stk.top().second, ans.size() - stk.top().second); // 获取括号内的字符串
+                for (int i = 0; i < n - 1; i++) { // 复制字符串 n-1 次
+                    ans += str;
+                }
+                stk.pop(); // 弹出栈顶元素
+            }
+        }
+
+        return ans; // 返回解码后的结果
+    }
+};
+```
