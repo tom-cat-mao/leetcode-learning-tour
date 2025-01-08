@@ -952,3 +952,64 @@ private:
 };
 
 ```
+
+## Greeding algorithm
+
+### 例题 [55.跳跃游戏](./55.跳跃游戏.cpp)       [45.跳跃游戏 II](./45.跳跃游戏-ii.cpp)
+
+#### 55题思路
+
+1. 添加辅助量 **max_index** ,即保存能到达的最远索引
+2. 对每一个数组中的值求最远索引，即 **i + nums[i]** ，如当前位置得到的最大距离高于原始值，则更新原始值
+3. 如当前索引 **i** 大于最大索引，则返回 **false**
+4. 如当前最大索引大于等于末索引，则跳出循环
+5. 通过则返回 **true**
+
+##### 示例代码
+
+```cpp
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int mx = 0;
+        for (int i = 0; mx < nums.size() - 1; i++) {
+            if (i > mx) { // 无法到达 i
+                return false;
+            }
+            mx = max(mx, i + nums[i]); // 从 i 最右可以跳到 i + nums[i]
+        }
+        return true;
+    }
+};
+```
+
+#### 45题思路
+
+1. 引入辅助量 **cur_right** 记录下已创建的右端点, **next_right** 记录能创建的最大右端点， **count**记录所需的步数
+2. 对每一个索引值求能到达的最大右端点，并与已记录的最大右端点进行比较，取较大值
+3. 如当前索引等于已创建的右端点即 **cur_right**，更新 **cur_right** 为 **next_right**，**count** 加一
+4. 当索引值小于末尾索引值时，退出循环。
+5. 返回 **count**
+
+
+##### 示例代码
+
+```cpp
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int ans = 0;
+        int cur_right = 0; // 已建造的桥的右端点
+        int next_right = 0; // 下一座桥的右端点的最大值
+        for (int i = 0; i + 1 < nums.size(); i++) {
+            next_right = max(next_right, i + nums[i]);
+            if (i == cur_right) { // 到达已建造的桥的右端点
+                cur_right = next_right; // 造一座桥
+                ans++;
+            }
+        }
+        return ans;
+    }
+};
+
+```
