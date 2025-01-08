@@ -45,7 +45,7 @@ I will add some algorithm to this file.
 
 ## 单调栈
 
-### 例题为 [42.接水](./42.接雨水.cpp)
+### 例题为 [42.接水](./42.接雨水.cpp)   [84.柱状图中最大的矩形](./84.柱状图中最大的矩形.cpp)
 
 ### 特点
 栈中的元素始终保持单调有序。通常有两种单调栈，分别是单调递增栈和单调递减栈。
@@ -101,7 +101,7 @@ for( int i = 0;i < size;++i)
 
 ## 滑动窗口
 
-### 例题为： [3.无重复字符的最长字符串](./3.无重复字符的最长子串.cpp), [438.找到字符串中所有字母异位词](./438.找到字符串中所有字母异位词.cpp)
+### 例题为： [3.无重复字符的最长字符串](./3.无重复字符的最长子串.cpp)    [438.找到字符串中所有字母异位词](./438.找到字符串中所有字母异位词.cpp)
 
 ### 模板
 ```cpp
@@ -898,4 +898,57 @@ public:
         return ans; // 返回解码后的结果
     }
 };
+```
+
+## Heap Sort
+
+### 例题 [215.数组中的第k个最大元素](./215.数组中的第k个最大元素.cpp)   [295.数据流的中位数](./295.数据流的中位数.cpp)
+
+
+### Strategy
+
+- Two heaps
+- first uesd as maxheap to store the lower part of the array
+- second used as minheap to store the upper part of the arrray
+- as adding the number, balance two heaps
+
+### Code
+
+```cpp
+class MedianFinder {
+public:
+    MedianFinder() {
+        // Constructor does not need to initialize anything
+    }
+
+    void addNum(int num) {
+        // Push the number into the max-heap (smaller half)
+        maxHeap.push(num);
+
+        // Balance the heaps by moving the largest element from max-heap to min-heap
+        minHeap.push(maxHeap.top());
+        maxHeap.pop();
+
+        // Ensure that the max-heap always has equal or one more element than the min-heap
+        if (maxHeap.size() < minHeap.size()) {
+            maxHeap.push(minHeap.top());
+            minHeap.pop();
+        }
+    }
+
+    double findMedian() {
+        if (maxHeap.size() > minHeap.size()) {
+            // If max-heap has one more element, the median is the top of max-heap
+            return maxHeap.top();
+        } else {
+            // If both heaps have equal elements, the median is the average of the two tops
+            return (maxHeap.top() + minHeap.top()) / 2.0;
+        }
+    }
+
+private:
+    priority_queue<int> maxHeap; // Max-heap to store the smaller half
+    priority_queue<int, vector<int>, greater<int>> minHeap; // Min-heap to store the larger half
+};
+
 ```
