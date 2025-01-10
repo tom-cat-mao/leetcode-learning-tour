@@ -599,7 +599,21 @@ function generateSubsets(arr):
 
 ## Dynamic Programming
 
-### [Example](./39.组合总和.cpp)
+### [精讲视频](https://www.bilibili.com/video/BV1Xj411K7oF/)
+
+### 核心
+
+**状态定义**
+
+**状态转移方程**
+
+### 回溯三问
+
+- 当前操作？
+- 子问题？
+- 下一个子问题？
+
+### Example [39.组合总和](./39.组合总和.cpp)    [70.爬楼梯](./70.爬楼梯.cpp)
 
 ### [MindSet](./note-from-chat/组合总和算法.txt)
 
